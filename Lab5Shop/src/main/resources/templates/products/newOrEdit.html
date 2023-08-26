@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+<body>	
+		<h1 th:if="${product.id != null}">Edit Product</h1>
+		<h1 th:if="${product.id == null}">New Product</h1>
+		<hr />
+		<a th:href="@{/products}">List of Products</a>
+		<hr />
+		<!-- đường link URL  http://localhost:8080/products/saveOrUpdate-->
+		<form th:action="@{/products/saveOrUpdate}"
+				method="post" th:object="${product}">
+				<div th:if="${product.id != null}">
+					Product Id:
+					<input type="text" placeholder="Product Id" th:field="*{id}"
+					readonly /> <br />
+				</div>
+				Category:
+				<select th:field="*{category.id}">
+					<option th:each="item: ${categories}" th:value="${item.id}" th:text="${item.name}"></option>
+				</select>
+				<br /><br />
+				Name:
+				<input type="text" th:field="*{name}" placeholder="Name"  /> <br />
+				Price:
+				<input type="number" th:field="*{price}" placeholder="Price" /> <br />
+				Quantity:
+				<input type="number" th:field="*{quantity}" placeholder="Quantity" /> <br />
+				Discount:
+				<input type="number" th:field="*{discount}" placeholder="Discount" /> <br />
+				Status:
+				<select th:field="*{status}">
+				<option th:each="state: ${T(com.example.shop.model.ProductStatus).values()}"
+				th:value="${state}" th:text="${state}"></option>
+				</select>
+				<!--  <p th:if="$(#fields.hasErrors('name')]" th:errors="*{name}"
+				th:class="${#fields.hasErrors ('name')}? error"></p>-->
+				<br /><br />
+				<input type="submit" th:if="${product.id == null}" value="Save" />
+				<input type="submit" th:if="${product.id != null}" value="Update" />
+			<!-- 	<ul>
+			 	<li th:each="error: ${#fields.allErrors())" th:text="${error}"></li>
+				</ul> -->
+		</form>	
+</body>
+</html>

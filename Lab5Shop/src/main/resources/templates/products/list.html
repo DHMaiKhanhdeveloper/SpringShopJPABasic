@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+<body>
+		<h1>List of Products</h1>
+		<hr />
+  		<a th:href="@{/products/newOrEdit}">New Product</a>
+		<hr />
+	  	<div th:if="${message != null}">
+		<h3 th:text="${message}"></h3>
+		</div>
+  	<table>
+
+		<tr>
+			<td>Category</td>
+			<td>Name</td>
+			<td>Quantity</td>
+			<td>Price</td>
+			<td>Discount</td>
+			<td>Status</td>
+			<td></td>
+		</tr>
+		<tr th:each="item: ${pages.content}">
+			<td th:text="${item.category.name}"></td>
+			<td th:text="${item.name}"></td>
+			<td th:text="${item.quantity}"></td>
+			<td th:text="${item.price}"></td>
+			<td th:text="${item.discount}"></td>
+			<td>
+				<th:block th:switch="${item.status.toString()}">
+				<span th:case="'Available'" style="color:green">Available</span>
+				<span th:case="'OutOfOrder'" style="color:green">Out of Order</span>
+				<span th:case="'Unavailable'" style="color:green">UnAvailable</span>
+				</th:block>
+			</td>
+			<td>
+			<a th:href="@{'/products/newOrEdit/' + ${item.id}}">Edit</a>
+			<a th:href="@{'/products/delete/' + ${item.id}}">Delete</a>
+			</td>
+		</tr>
+	</table>
+	<hr />
+	 	<div>
+		Pages:
+			<span th:each="i : ${#numbers.sequence(0, pages.totalPages - 1)}">
+			<a th:href="@{/products(page=${i}, size=${pages.size}, sort=${sort})}"
+			th:text="${i + 1}"></a>
+			</span>
+		</div>
+	<hr />
+		<form th:action="@{/products}">
+		<select name="sort">
+			<option value="id">Product ID</option>
+			<option value="name">Name</option>
+			<option value="price">Price</option>
+			<option value="quantity">Quantity</option>
+			<option value="discount">Discount</option>
+		</select>
+		<input type="submit" value="Sort" />
+		</form>
+</body>
+</html>
